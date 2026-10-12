@@ -2,7 +2,10 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using static System.Console;
+
+
 
 namespace banking
 {
@@ -10,20 +13,56 @@ namespace banking
     {
         static void Main(string[] args)
         {
+            Console.CursorVisible = false;
+           
             int money = 100000;
-            int workeramn = 0;
             int iron = 0;
             int cogwheels = 0;
+            int day = 0;
+            
+            int workeramn = 0;
+            int workerpay = 0;
+            int workerhappy = 100;
 
-            Console.WriteLine(money);
-            Console.WriteLine("PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE, A for PASS ONE MONTH");
+            bool writen = true;
+
+            string clicked = "nothing";
+
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine("PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE, A for PASS ONE DAY");
 
 
             while (true)
             {
+                Console.SetCursorPosition(0, 0);
+                Console.Write(money);
+                Console.SetCursorPosition(10, 0);
+                Console.Write(iron);
+                Console.SetCursorPosition(15, 0);
+                Console.Write(workeramn);
+                Console.SetCursorPosition(20, 0);
+                Console.Write(cogwheels);
+                Console.SetCursorPosition(25, 0);
+                Console.Write(workerhappy);
+
+
                 if (KeyAvailable)
                 {
                     var input = Console.ReadKey(true);
+
+                    //clears
+                    if (writen == true)
+                    {
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Console.SetCursorPosition(0, i + 4);
+                            Console.WriteLine("                                                                                                                           ");
+                        }
+                    }
+                    //clears
+
+                    Console.SetCursorPosition(0, 4);
+                    writen = false;
                     if (input.Key == ConsoleKey.B)
                     {
                         Console.Write(
@@ -37,6 +76,7 @@ namespace banking
                             $"BALANCE: {money}\n" +
                             "\n"
                         );
+                        writen = true;
                     }
                     if (input.Key == ConsoleKey.L)
                     {
@@ -53,6 +93,7 @@ namespace banking
                             "MORTGAGE 1,2,3  --  1 factory, 10 factories, 100 factories\n" +
                             "\n"
                         );
+                        writen = true;
                     }
                     if (input.Key == ConsoleKey.H)
                     {
@@ -75,6 +116,7 @@ namespace banking
                             "PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE\n" +
                             "\n"
                         );
+                        writen = true;
                     }
 
 
@@ -90,17 +132,32 @@ namespace banking
                             $"workers employed: {workeramn}\n" +
                             "\n"
                         );
+                        writen = true;
+                        clicked = "market";
                     }
-                    else if (input.Key == ConsoleKey.Z)
+                    if (input.Key == ConsoleKey.Z && clicked == "market")
                     {
                         iron++;
                         money -= 10;
+                        writen = false;
                     }
-                    else if (input.Key == ConsoleKey.X)
+                    if (input.Key == ConsoleKey.X && clicked == "market")
                     {
                         workeramn++;
+                        writen = false;
                     }
-
+                    if (input.Key == ConsoleKey.C && clicked == "market")
+                    {
+                        iron--;
+                        money += 8;
+                        writen = false;
+                    }
+                    if (input.Key == ConsoleKey.V && clicked == "market")
+                    {
+                        cogwheels--;
+                        money += 20;
+                        writen = false;
+                    }
 
                     if (input.Key == ConsoleKey.S)
                     {
@@ -112,6 +169,7 @@ namespace banking
                             $"COGWHEELS: {cogwheels}\n" +
                             "\n"
                         );
+                        writen = true;
                     }
 
 
@@ -120,24 +178,40 @@ namespace banking
                         Console.Write(
                             "\n" +
                             "CHANGE WORKER PAY : Z\n" +
-                            "CHANGE WORK-HOURS" +
+                            "CHANGE WORK-HOURS\n" +
                             "\n"
                         );
+                        writen = true;
+                        clicked = "config";
                     }
-                    else if (input.Key == ConsoleKey.Z)
+                    if (input.Key == ConsoleKey.Z && clicked == "config")
                     {
-                        int workerpay = 0;
+
                         Console.Write("PAY $ : ");
                         workerpay = int.Parse(Console.ReadLine());
+                        writen = true;
                     }
 
                     if (input.Key == ConsoleKey.A)
                     {
                         Console.Write(
                             "\n" +
-                            "" +
+                            "\n" +
                             "\n"
                         );
+                        day++;
+                        iron -= workeramn;
+                        cogwheels += workeramn;
+                        writen = true;
+
+                        if (day % 30 == 1) 
+                        {
+                            money -= workerpay * workeramn; 
+                            if (workerpay == 0)
+                            {
+                                money -= money / 5;
+                            }
+                        }
                     }
 
 

@@ -1,141 +1,246 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using static System.Console;
 
-namespace sanpe
+
+
+namespace banking
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Stopwatch stoping = new();
-            stoping.Start();
+            Console.CursorVisible = false;
+           
+            int money = 100000;
+            int iron = 0;
+            int cogwheels = 0;
+            int day = 0;
 
-            
+            char choise = ' ';
 
-            CursorVisible = false;
-            ConsoleKeyInfo key;
-            List<Vector2> tail = new List<Vector2>();
-            Vector2 xy;
-            xy.X = 2;
-            xy.Y = 2;
-            int leng = 3;
+            int workeramn = 0;
+            int workerpay = 0;
+            int workerhappy = 100;
 
-            int width = 10;
-            int height = 10;
-            List<Vector2> positions = new List<Vector2>();
+            bool writen = true;
 
-            Random rnd = new Random();
-            bool appels = true;
-            Vector2 appel;
-            appel.X = 2;
-            appel.Y = 2;
+            Console.SetCursorPosition(0, 1);
+            Console.WriteLine("PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE, A for PASS ONE DAY");
+
 
             while (true)
             {
-                if (stoping.ElapsedMilliseconds < 16)
-                {
-                    continue;
-                }
+                Console.SetCursorPosition(0, 0);
+                Console.Write(money);
+                Console.SetCursorPosition(10, 0);
+                Console.Write(iron);
+                Console.SetCursorPosition(15, 0);
+                Console.Write(workeramn);
+                Console.SetCursorPosition(20, 0);
+                Console.Write(cogwheels);
+                Console.SetCursorPosition(25, 0);
+                Console.Write(workerhappy);
 
-                stoping.Restart();
 
                 if (KeyAvailable)
                 {
-                    key = Console.ReadKey(true);
-                    if (key.Key == ConsoleKey.W)
-                    {
-                        xy.Y--;
-                        if (xy.Y < 0) xy.Y++;
-                        tail.Add(xy);
-                    }
-                    if (key.Key == ConsoleKey.A)
-                    {
-                        xy.X--;
-                        if (xy.X < 0) xy.X++;
-                        tail.Add(xy);
-                    }
-                    if (key.Key == ConsoleKey.S)
-                    {
-                        xy.Y++;
-                        tail.Add(xy);
-                    }
-                    if (key.Key == ConsoleKey.D)
-                    {
-                        xy.X++;
-                        tail.Add(xy);
-                    }
-                }
+                    var input = Console.ReadKey(true);
 
-                //making sure appels spawn not on snake
-                positions.Clear();
-                for (int i = 0; i < width; i++)
-                {
-                    for (int j = 0; j < height; j++)
+                    //clears
+                    if (writen == true)
                     {
-                        Vector2 pos = new(i, j);
-                        bool isInSnake = false;
-                        for (int l = 0; l < tail.Count; l++)
+                        for (int i = 0; i < 20; i++)
                         {
-                            if (tail[l] == pos)
+                            Console.SetCursorPosition(0, i + 4);
+                            Console.WriteLine("                                                                                                                           ");
+                        }
+                    }
+                    //clears
+
+                    Console.SetCursorPosition(0, 4);
+                    writen = false;
+
+                    while(choise == 'B')
+                    {
+                        if (input.Key == ConsoleKey.B)
+                        {
+                            Console.Write(
+                                "\n" +
+                                "### ### #   ### # #  ## ### \n" +
+                                "# # # # #   # # ### #   #   \n" +
+                                "##  ### #   ### # # #   ### \n" +
+                                "# # # # #   # # # # #   #   \n" +
+                                "### # # ### # # # #  ## ### \n" +
+                                "----------------------------\n" +
+                                $"BALANCE: {money}\n" +
+                                "\n"
+                            );
+                            writen = true;
+                        }
+                    }
+
+                    while(choise == 'L')
+                    {
+                        if (input.Key == ConsoleKey.L)
+                        {
+                            Console.Write(
+                                "\n" +
+                                "#   ### ### # # ### \n" +
+                                "#   # # # # ### #   \n" +
+                                "#   # # ### # # ### \n" +
+                                "#   # # # # # #   # \n" +
+                                "### ### # # # # ### \n" +
+                                "--------------------\n" +
+                                "LOANS:\n" +
+                                "MONEY 1,2,3  --  10 000, 100 000, 1 000 000\n" +
+                                "MORTGAGE 1,2,3  --  1 factory, 10 factories, 100 factories\n" +
+                                "\n"
+                            );
+                            writen = true;
+                        }
+                    }
+
+                    if (input.Key == ConsoleKey.H)
+                    {
+                    }
+                    while(choise == 'H')
+                    {
+                        Console.Write(
+                            "\n" +
+                            "# # ### #   ### \n" +
+                            "# # #   #   # # \n" +
+                            "### ### #   ### \n" +
+                            "# # #   #   #   \n" +
+                            "# # ### ### #   \n" +
+                            "----------------\n" +
+                            "HELLO\n" +
+                            "you are a capitalist, this is a game about owning 'resources', 'factories' and 'workers'\n" +
+                            "take out loans, buy people and buildings.\n" +
+                            "engage in bourgois antics, kill, be killed and own your fellow man like god intended\n" +
+                            "remember you earned this, not through hard work, no, through luck and exploitation you have 'earned'\n" +
+                            "a 'small modest loan' of 1 000 000$\n" +
+                            "and now you shall have 'fun' make money at any cost and make your patron proud!\n" +
+                            "--------------------\n" +
+                            "PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE\n" +
+                            "\n"
+                        );
+                        writen = true;
+                    }
+
+                    if (input.Key == ConsoleKey.M)
+                    {
+                        choise = 'M';
+                        Console.Write(
+                            "\n" +
+                            $"BALANCE: {money}\n" +
+                            "Z : 10 iron\n" +
+                            "price : 10$\n" +
+                            "X : 1 worker\n" +
+                            "worker cost for upkeep : 1 iron, produces : 1 gear : 20$\n" +
+                            $"workers employed: {workeramn}\n" +
+                            "\n"
+                        );
+                    }
+                    while (choise == 'M')
+                    {
+                        Console.SetCursorPosition(0, 0);
+                        Console.Write(money);
+                        Console.SetCursorPosition(10, 0);
+                        Console.Write(iron);
+                        Console.SetCursorPosition(15, 0);
+                        Console.Write(workeramn);
+                        Console.SetCursorPosition(20, 0);
+                        Console.Write(cogwheels);
+                        Console.SetCursorPosition(25, 0);
+                        Console.Write(workerhappy);
+                        var inputM = Console.ReadKey(true);
+                        writen = true;
+                        if (inputM.Key == ConsoleKey.Z)
+                        {
+                            iron++;
+                            money -= 10;
+                            writen = false;
+                        }
+                        if (inputM.Key == ConsoleKey.X)
+                        {
+                            workeramn++;
+                            writen = false;
+                        }
+                        if (inputM.Key == ConsoleKey.C)
+                        {
+                            iron--;
+                            money += 8;
+                            writen = false;
+                        }
+                        if (inputM.Key == ConsoleKey.V)
+                        {
+                            cogwheels--;
+                            money += 20;
+                            writen = false;
+                        }
+                    }
+
+                    if (input.Key == ConsoleKey.S)
+                    {
+                        Console.Write(
+                            "\n" +
+                            $"BALANCE: {money}\n" +
+                            $"WORKERS: {workeramn}\n" +
+                            $"IRON: {iron}\n" +
+                            $"COGWHEELS: {cogwheels}\n" +
+                            "\n"
+                        );
+                        writen = true;
+                    }
+
+
+                    if (input.Key == ConsoleKey.C)
+                    {
+                        Console.Write(
+                            "\n" +
+                            "CHANGE WORKER PAY : Z\n" +
+                            "CHANGE WORK-HOURS\n" +
+                            "\n"
+                        );
+                        writen = true;
+                    }
+                    if (input.Key == ConsoleKey.Z)
+                    {
+
+                        Console.Write("PAY $ : ");
+                        workerpay = int.Parse(Console.ReadLine());
+                        writen = true;
+                    }
+
+                    if (input.Key == ConsoleKey.A)
+                    {
+                        Console.Write(
+                            "\n" +
+                            "\n" +
+                            "\n"
+                        );
+                        day++;
+                        iron -= workeramn;
+                        cogwheels += workeramn;
+                        writen = true;
+
+                        if (day % 30 == 0) 
+                        {
+                            money -= workerpay * workeramn; 
+                            if (workerpay == 0)
                             {
-                                isInSnake = true;
-                                break;
+                                money -= money / 5;
                             }
                         }
-                        if (!isInSnake) positions.Add(pos);
+                        money -= (100 - workerhappy) * 1000;
                     }
-                }
-                //making sure appels spawn not on snake
-
-                //appels
-                Console.SetCursorPosition(30,10);
-                Console.Write(" ");
-                Console.SetCursorPosition(31, 10);
-                Console.Write(" ");
-                Console.SetCursorPosition(32, 10);
-                Console.Write(" ");
-                Console.SetCursorPosition(30, 10);
-                Console.Write(positions.Count);
-                if (appels)
-                {
-                    var randompos = positions[rnd.Next(positions.Count)];
-                    appel.X = randompos.X;
-                    appel.Y = randompos.Y;
-                    Console.SetCursorPosition((int)appel.X, (int)appel.Y);
 
 
-                    Console.Write("A");
-                    appels = false;
                 }
-                if (!appels) //collision?
-                {
-                    if (appel.X == xy.X && appel.Y == xy.Y)
-                    {
-                        leng++;
-                        appels = true;
-                    }
-                }
-                //appels
-                
-                
-                if (tail.Count > leng)
-                {
-                    SetCursorPosition((int)tail[0].X, (int)tail[0].Y);
-                    Console.Write(" ");
-                    tail.RemoveAt(0);
-                }
-
-                for (int i = 0; i < tail.Count(); i++)
-                {
-                    Console.SetCursorPosition((int)tail[i].X, (int)tail[i].Y);
-
-                    Console.Write("1");
-                }
-                Console.SetCursorPosition(5, 20);
-                Console.Write($"{leng}");
-                Console.SetCursorPosition(10, 20);
-                Console.Write($"{appel}");
             }
         }
     }

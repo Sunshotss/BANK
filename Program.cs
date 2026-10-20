@@ -30,7 +30,7 @@ namespace banking
 
             bool gameon = true;
 
-            void Day(int money, int iron, int cogwheels, int workerAmount, int workerhappy, int workerpay, int day)
+            void Day(ref int money, ref int iron, ref int cogwheels, ref int workerAmount, ref int workerhappy, ref int workerpay, ref int day)
             {
                 Console.Write(
                     "\n" +
@@ -52,7 +52,7 @@ namespace banking
                 money -= (100 - workerhappy) * 1000;
             }
 
-            void Market(ConsoleKeyInfo input, int money, int iron, int cogwheels)
+            void Market(ref ConsoleKeyInfo input, ref int money, ref int iron, ref int cogwheels)
             {
 
                 if (input.Key == ConsoleKey.M)
@@ -73,16 +73,16 @@ namespace banking
                     iron++;
                     money -= 10;
                 }
-                if (input.Key == ConsoleKey.X)
+                else if (input.Key == ConsoleKey.X)
                 {
                     workerAmount++;
                 }
-                if (input.Key == ConsoleKey.C)
+                else if (input.Key == ConsoleKey.C)
                 {
                     iron--;
                     money += 8;
                 }
-                if (input.Key == ConsoleKey.V)
+                else if (input.Key == ConsoleKey.V)
                 {
                     cogwheels--;
                     money += 20;
@@ -101,6 +101,8 @@ namespace banking
                 Console.Write(cogwheels);
                 Console.SetCursorPosition(25, 0);
                 Console.Write(workerhappy);
+                Console.SetCursorPosition(30, 0);
+                Console.Write(day);
             }
 
             Console.SetCursorPosition(0, 1);
@@ -208,9 +210,9 @@ namespace banking
                     {
                         option = 1;
                     }
-                    if (input.Key == ConsoleKey.D)
+                    if (input.Key == ConsoleKey.A)
                     {
-                        Day(money, iron, cogwheels, workerAmount, workerhappy, workerpay, day);
+                        Day(ref money, ref iron, ref cogwheels, ref workerAmount, ref workerhappy, ref workerpay, ref day);
                     }
                     //czech option
 
@@ -219,7 +221,7 @@ namespace banking
                     //options
                     if (option == 1)
                     {
-                        Market(input, money, iron, cogwheels);
+                        Market(ref input, ref money, ref iron, ref cogwheels);
                     }
                     //options
                 }

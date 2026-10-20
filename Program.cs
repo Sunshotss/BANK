@@ -63,6 +63,8 @@ namespace banking
                         "Z : 10 iron\n" +
                         "price : 10$\n" +
                         "X : 1 worker\n" +
+                        "C : 10 iron sold\n" +
+                        "V : 10 cogwheel sold\n" +
                         "worker cost for upkeep : 1 iron, produces : 1 gear : 20$\n" +
                         $"workers employed: {workerAmount}\n" +
                         "\n"
@@ -70,8 +72,8 @@ namespace banking
                 }
                 if (input.Key == ConsoleKey.Z)
                 {
-                    iron++;
-                    money -= 10;
+                    iron += 10;
+                    money -= 100;
                 }
                 else if (input.Key == ConsoleKey.X)
                 {
@@ -79,13 +81,13 @@ namespace banking
                 }
                 else if (input.Key == ConsoleKey.C)
                 {
-                    iron--;
-                    money += 8;
+                    iron -= 10;
+                    money += 80;
                 }
                 else if (input.Key == ConsoleKey.V)
                 {
-                    cogwheels--;
-                    money += 20;
+                    cogwheels -= 10;
+                    money += 200;
                 }
             }
 
@@ -109,17 +111,7 @@ namespace banking
             Console.WriteLine("PRESS: L for LOAN,  M for MARKET, H for HELP, S for STATS, C for CONFIGURE, A for PASS ONE DAY");
 
 
-            /*      
-            //clears
-           if (0 == 2)
-           {
-               for (int i = 0; i < 20; i++)
-               {
-                   Console.SetCursorPosition(0, i + 4);
-                   Console.WriteLine("                                                                                                                           ");
-               }
-           }
-           //clears
+            /*
 
            Console.SetCursorPosition(0, 4);
 
@@ -201,6 +193,7 @@ namespace banking
                 startup(money, iron, cogwheels, workerAmount, workerhappy, workerpay, day);
                 //show stats
 
+                Console.SetCursorPosition(0, 4);
                 if (KeyAvailable)
                 {
                     input = Console.ReadKey(true);

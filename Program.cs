@@ -7,19 +7,17 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using static System.Console;
 
-
-
 namespace banking
 {
     class Worker
     {
         public int pay = 0;
-        public int happynes = 100;
+        public int happiness = 100;
         public string name = "jonathan";
         public Worker(int pay, int happynes, string name)
         {
             this.pay = pay;
-            this.happynes = happynes;
+            this.happiness = happynes;
             this.name = name;
         }
     }
@@ -32,10 +30,9 @@ namespace banking
             ConsoleKeyInfo input = new();
 
             List<Worker> recruits = new List<Worker>();
-            Worker worker = new Worker(2, 100, "jacob");
-            recruits.Add(worker);
-            recruits.Add(new Worker(233,28,"samuel"));
-            recruits.Add(new Worker(200, 56, "elias"));
+            recruits.Add(new Worker(15, 100, "jacob"));
+            recruits.Add(new Worker(23,28,"samuel"));
+            recruits.Add(new Worker(20, 56, "elias"));
 
             List<Worker> employees = new List<Worker>();
 
@@ -44,13 +41,10 @@ namespace banking
             int cogwheels = 0;
             int day = 0;
 
-            int workerAmount = 0;
-            int workerpay = 0;
-            int workerhappy = 100;
 
             bool gameon = true;
 
-            void Day(ref int money, ref int iron, ref int cogwheels, ref int workerAmount, ref int workerhappy, ref int workerpay, ref int day)
+            void Day(ref int money, ref int iron, ref int cogwheels, ref int day)
             {
                 Console.Write(
                     "\n" +
@@ -58,18 +52,20 @@ namespace banking
                     "\n"
                 );
                 day++;
-                iron -= workerAmount;
-                cogwheels += workerAmount;
 
-                if (day % 30 == 0) 
+                foreach (Worker employee in employees)
                 {
-                    money -= workerpay * workerAmount; 
-                    if (workerpay == 0)
+                    iron--;
+                    cogwheels++;
+
+                    employee.happiness--;
+
+                    if (day % 30 == 0) 
                     {
-                        money -= money / 5;
+                        money -= employee.pay;
                     }
+                    //money -= (100 - employee.happiness);
                 }
-                money -= (100 - workerhappy) * 1000;
             }
 
             void Market(ref ConsoleKeyInfo input, ref int money, ref int iron, ref int cogwheels, ref List<Worker> recruits)
@@ -82,17 +78,18 @@ namespace banking
                         $"BALANCE: {money}\n" +
                         "Z : 10 iron\n" +
                         "price : 10$\n" +
-                        "X : 1 worker\n" +
+                        "arrow up / arrow down selects worker to purchase\n" +
+                        "X : buy worker worker\n" +
                         "C : 10 iron sold\n" +
                         "V : 10 cogwheel sold\n" +
                         "worker cost for upkeep : 1 iron, produces : 1 gear : 20$\n" +
-                        $"workers employed: {workerAmount}\n" +
                         "\n" +
                         "recruits:\n"
                     );
                     for (int i = 0; i < recruits.Count; i++)
                     {
-                        Console.WriteLine(recruits[i].name);
+                        Console.Write($"{i + 1}. ");
+                        Console.WriteLine(recruits[i].name + "  pay: " + recruits[i].pay);
                     }
                 }
                 if (input.Key == ConsoleKey.Z)
@@ -100,40 +97,82 @@ namespace banking
                     iron += 10;
                     money -= 100;
                 }
-                else if (input.Key == ConsoleKey.X)
+
+
+                int selected = 2;
+                if (input.Key == ConsoleKey.DownArrow)
                 {
-                     
+                    selected++;
                 }
-                else if (input.Key == ConsoleKey.C)
+                if (input.Key == ConsoleKey.UpArrow)
+                {
+                    selected--;
+                }
+                if (input.Key == ConsoleKey.X)
+                {
+                    employees.Add(recruits[selected]);
+                    Console.SetCursorPosition(0, 20);
+                    Console.WriteLine("current employees:");
+                    for (int i = 0; i < employees.Count; i++)
+                    {
+                        Console.WriteLine(employees[i].name + "  pay: " + employees[i].pay);
+                    }
+                }
+
+
+                if (input.Key == ConsoleKey.C)
                 {
                     iron -= 10;
                     money += 80;
                 }
-                else if (input.Key == ConsoleKey.V)
+                if (input.Key == ConsoleKey.V)
                 {
                     cogwheels -= 10;
                     money += 200;
                 }
             }
 
-            void startup(int money, int iron, int cogwheels, int workerAmount, int workerhappy, int workerpay, int day)
+            void Startup(int money, int iron, int cogwheels, int day)
             {
+                Console.SetCursorPosition(0, 1);
+                Console.WriteLine("PRESS: L for LOAN,  M for MARKET, H for HELP, C for WAGES, A for PASS ONE DAY");
                 Console.SetCursorPosition(0, 0);
-                Console.Write(money);
-                Console.SetCursorPosition(10, 0);
-                Console.Write(iron);
-                Console.SetCursorPosition(15, 0);
-                Console.Write(workerAmount);
+                Console.Write("$ " + money);
                 Console.SetCursorPosition(20, 0);
-                Console.Write(cogwheels);
-                Console.SetCursorPosition(25, 0);
-                Console.Write(workerhappy);
+                Console.Write("iron: " + iron);
                 Console.SetCursorPosition(30, 0);
-                Console.Write(day);
+                Console.Write("cogs: " + cogwheels);
+                Console.SetCursorPosition(40, 0);
+                Console.Write("day: " + day);
             }
 
-            Console.SetCursorPosition(0, 1);
-            Console.WriteLine("PRESS: L for LOAN,  M for MARKET, H for HELP, S for STATS, C for CONFIGURE, A for PASS ONE DAY");
+            void Help()
+            {
+                if (input.Key == ConsoleKey.H)
+                {
+                    Console.Write(
+                        "\n" +
+                        "# # ### #   ### \n" +
+                        "# # #   #   # # \n" +
+                        "### ### #   ### \n" +
+                        "# # #   #   #   \n" +
+                        "# # ### ### #   \n" +
+                        "----------------\n" +
+                        "HELLO\n" +
+                        "you are a capitalist, this is a game about owning 'resources', 'factories' and 'workers'\n" +
+                        "take out loans, buy people and buildings.\n" +
+                        "engage in bourgois antics, kill, be killed and own your fellow man like god intended\n" +
+                        "remember you earned this, not through hard work, no, through luck and exploitation you have 'earned'\n" +
+                        "a 'small modest loan' of 1 000 000$\n" +
+                        "and now you shall have 'fun' make money at any cost and make your patron proud!\n" +
+                        "--------------------\n" +
+                        "PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE\n" +
+                        "\n"
+                    );
+                }
+
+            }
+
 
 
             /*
@@ -157,66 +196,15 @@ namespace banking
                );
            }
 
-           if (input.Key == ConsoleKey.H)
-           {
-               Console.Write(
-                   "\n" +
-                   "# # ### #   ### \n" +
-                   "# # #   #   # # \n" +
-                   "### ### #   ### \n" +
-                   "# # #   #   #   \n" +
-                   "# # ### ### #   \n" +
-                   "----------------\n" +
-                   "HELLO\n" +
-                   "you are a capitalist, this is a game about owning 'resources', 'factories' and 'workers'\n" +
-                   "take out loans, buy people and buildings.\n" +
-                   "engage in bourgois antics, kill, be killed and own your fellow man like god intended\n" +
-                   "remember you earned this, not through hard work, no, through luck and exploitation you have 'earned'\n" +
-                   "a 'small modest loan' of 1 000 000$\n" +
-                   "and now you shall have 'fun' make money at any cost and make your patron proud!\n" +
-                   "--------------------\n" +
-                   "PRESS: L for LOAN,  M for MARKET, B for BALANCE, H for HELP, S for STATS, C for CONFIGURE\n" +
-                   "\n"
-               );
-           }
-
-
-           if (input.Key == ConsoleKey.S)
-           {
-               Console.Write(
-                   "\n" +
-                   $"BALANCE: {money}\n" +
-                   $"WORKERS: {workerAmount}\n" +
-                   $"IRON: {iron}\n" +
-                   $"COGWHEELS: {cogwheels}\n" +
-                   "\n"
-               );
-           }
-
-
-           if (input.Key == ConsoleKey.C)
-           {
-               Console.Write(
-                   "\n" +
-                   "CHANGE WORKER PAY : Z\n" +
-                   "CHANGE WORK-HOURS\n" +
-                   "\n"
-               );
-           }
-           if (input.Key == ConsoleKey.Z)
-           {
-               Console.Write("PAY $ : ");
-               workerpay = int.Parse(Console.ReadLine());
-           }
            */
 
             int option = 0;
 
             while (gameon)
             {
-                //shows stats
-                startup(money, iron, cogwheels, workerAmount, workerhappy, workerpay, day);
-                //show stats
+                //shows stats and important stuff on start
+                Startup(money, iron, cogwheels, day);
+                //show stats and important stuff on start
 
                 Console.SetCursorPosition(0, 4);
                 if (KeyAvailable)
@@ -230,11 +218,19 @@ namespace banking
                     }
                     if (input.Key == ConsoleKey.A)
                     {
-                        Day(ref money, ref iron, ref cogwheels, ref workerAmount, ref workerhappy, ref workerpay, ref day);
+                        Day(ref money, ref iron, ref cogwheels, ref day);
+                    }
+                    if (input.Key == ConsoleKey.H)
+                    {
+                        Help();
+                    }
+                    if (input.Key == ConsoleKey.Escape) 
+                    { 
+                        option = 0; 
+                        Console.Clear(); 
                     }
                     //czech option
 
-                    if (input.Key == ConsoleKey.Escape) option = 0;
 
                     //options
                     if (option == 1)

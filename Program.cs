@@ -31,8 +31,8 @@ namespace banking
 
             List<Worker> recruits = new List<Worker>();
             recruits.Add(new Worker(15, 100, "jacob"));
-            recruits.Add(new Worker(23,28,"samuel"));
-            recruits.Add(new Worker(20, 56, "elias"));
+            recruits.Add(new Worker(23, 100, "samuel"));
+            recruits.Add(new Worker(20, 100, "elias"));
 
             List<Worker> employees = new List<Worker>();
 
@@ -40,6 +40,7 @@ namespace banking
             int iron = 0;
             int cogwheels = 0;
             int day = 0;
+            int selected = 2;
 
 
             bool gameon = true;
@@ -53,24 +54,28 @@ namespace banking
                 );
                 day++;
 
-                foreach (Worker employee in employees)
+                for (int i = 0; i < employees.Count; i++)
                 {
                     iron--;
                     cogwheels++;
 
-                    employee.happiness--;
+                    employees[i].happiness--;
 
                     if (day % 30 == 0) 
                     {
-                        money -= employee.pay;
+                        money -= employees[i].pay;
                     }
                     //money -= (100 - employee.happiness);
+
+                    if (employees[i].happiness <= 0)
+                    {
+                        employees.Remove(employees[i]);
+                    }
                 }
             }
 
             void Market(ref ConsoleKeyInfo input, ref int money, ref int iron, ref int cogwheels, ref List<Worker> recruits)
             {
-
                 if (input.Key == ConsoleKey.M)
                 {
                     Console.Write(
@@ -87,11 +92,12 @@ namespace banking
                         "recruits:\n"
                     );
                     for (int i = 0; i < recruits.Count; i++)
-                    {
-                        Console.Write($"{i + 1}. ");
-                        Console.WriteLine(recruits[i].name + "  pay: " + recruits[i].pay);
+                    { 
+                        Console.Write($"{i}. ");
+                        Console.WriteLine(recruits[i].name + "  pay: " + recruits[i].pay + "  hapiness: " + recruits[i].happiness);
                     }
                 }
+
                 if (input.Key == ConsoleKey.Z)
                 {
                     iron += 10;
@@ -99,23 +105,25 @@ namespace banking
                 }
 
 
-                int selected = 2;
                 if (input.Key == ConsoleKey.DownArrow)
                 {
                     selected++;
+                    Console.WriteLine(selected);
                 }
                 if (input.Key == ConsoleKey.UpArrow)
                 {
                     selected--;
+                    Console.WriteLine(selected);
                 }
                 if (input.Key == ConsoleKey.X)
                 {
-                    employees.Add(recruits[selected]);
+                    Worker worker = new Worker(recruits[selected].pay, recruits[selected].happiness, recruits[selected].name);
+                    employees.Add(worker);
                     Console.SetCursorPosition(0, 20);
                     Console.WriteLine("current employees:");
                     for (int i = 0; i < employees.Count; i++)
                     {
-                        Console.WriteLine(employees[i].name + "  pay: " + employees[i].pay);
+                        Console.WriteLine(employees[i].name + "  pay: " + employees[i].pay + "  hapiness: " + employees[i].happiness);
                     }
                 }
 
@@ -144,6 +152,12 @@ namespace banking
                 Console.Write("cogs: " + cogwheels);
                 Console.SetCursorPosition(40, 0);
                 Console.Write("day: " + day);
+                Console.SetCursorPosition(0, 20);
+                Console.WriteLine("current employees:");
+                for (int i = 0; i < employees.Count; i++)
+                {
+                    Console.WriteLine(employees[i].name + "  pay: " + employees[i].pay + "  hapiness: " + employees[i].happiness);
+                }
             }
 
             void Help()
